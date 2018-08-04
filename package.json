@@ -1,0 +1,23 @@
+{
+  "name": "bamazon-cli",
+  "version": "1.0.0",
+  "description": "Homework activity emulating an \"Amazon like\" storefront through the command line",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matt75kelly/bamazon-CLI.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/matt75kelly/bamazon-CLI/issues"
+  },
+  "homepage": "https://github.com/matt75kelly/bamazon-CLI#readme",
+  "dependencies": {
+    "inquirer": "^6.0.0",
+    "mysql": "^2.16.0"
+  }
+}
