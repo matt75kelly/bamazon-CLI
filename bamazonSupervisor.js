@@ -9,13 +9,12 @@ const connection = mysql.createConnection({
 });
 
 function printDepartments(){
-    let sql = "SELECT department, department_id, department_name, overhead_cost, product_sales FROM products INNER JOIN departments ON department_name = department";
+    let sql = "SELECT department, department_id, department_name, overhead_cost, product_sales FROM products JOIN departments ON department_name = department";
     connection.query(sql, (error, data)=>{
         if(error){
             console.log(`Error: ${error}`);
         }
         else{
-            console.log(data);
             console.log('\n-ID-|---------Department Name--------|' +
                 '---------Over Head Cost---------|' + '-----------Total Sales----------|'
                 + '----------Total Profit----------');
@@ -24,10 +23,10 @@ function printDepartments(){
             for(let i = 0; i < data.length; i++){
                 if(data[i].department_id > array.length){
                     let item = {
-                        id = data[i].department_id,
-                        name = data[i].department_name,
-                        cost = data[i].overhead_cost,
-                        sales = data[i].product_sales
+                        id : data[i].department_id,
+                        name : data[i].department_name,
+                        cost : data[i].overhead_cost,
+                        sales : data[i].product_sales
                     }
                     array.push(item);
                 }
@@ -75,7 +74,7 @@ function createDepartment(){
             }
         }
     ]).then(answers=>{
-        let sql = 'INSERT INTO departments SET';
+        let sql = 'INSERT INTO departments SET ?';
         connection.query(sql, 
         {
             department_name: answers.deptName,
