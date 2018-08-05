@@ -132,53 +132,69 @@ function increaseStock(){
 }
 
 function addNewStock(){
-    ask.prompt([
-        {
-            type: "input",
-            name: "productName",
-            message: "What is the name of the Product you wish to add?"
-        },
-        {
-            type: "input",
-            name: "department",
-            message: "Which department does this Product belong to?"
-        },
-        {
-            type: "input",
-            name: "price",
-            message: "What is the selling price for this Product?",
-            validate: value=>{
-                if(!isNaN(value) && value > 0) return true;
-                else return false;
-            }
-        },
-        {
-            type: "input",
-            name: "stock",
-            message: "What is the initial stock of this Product you would like to add to inventory?",
-            validate: value=>{
-                if(!isNaN(value) && value > 0) return true;
-                else return false;
-            }
+    let sql = "SELECT department_name FROM departments";
+    connection.query(sql,(err, data)=>{
+        if(error){
+            console.log(`Connection Error: ${err}`);
         }
-    ]).then(answers=>{
-        let item ={
-            product_name: answers.productName,
-            department_name: answers.department,
-            selling_price: Number(answers.price).toFixed(2),
-            stock_quantity: Math.floor(Number(answers.stock))
-        };
-        let sql = "INSERT INTO products SET ?"
-        connection.query(sql, item, error=>{
-            if(error){
-                console.log(`Creation Error: ${error}`);
+        else{
+            console.log(data);
+            let depts = [];
+            for(let j = 0; j < data.length; j++){
+                depts.push(data[j].department_name);
             }
-            else{
-                console.log(`Product successfully added into inventory!`);
-                setTimeout(menu, 2500);
-            }
-        })
+            ask.prompt([
+                {
+                    type: "input",
+                    name: "productName",
+                    message: "What is the name of the Product you wish to add?"
+                },
+                {
+                    type: "list",
+                    name: "department",
+                    message: "Which department does this Product belong to?",
+                    choices: depts
+                },
+                {
+                    type: "input",
+                    name: "price",
+                    message: "What is the selling price for this Product?",
+                    validate: value=>{
+                        if(!isNaN(value) && value > 0) return true;
+                        else return false;
+                    }
+                },
+                {
+                    type: "input",
+                    name: "stock",
+                    message: "What is the initial stock of this Product you would like to add to inventory?",
+                    validate: value=>{
+                        if(!isNaN(value) && value > 0) return true;
+                        else return false;
+                    }
+                }
+            ]).then(answers=>{
+                let item ={
+                    product_name: answers.productName,
+                    department: answers.department,
+                    selling_price: Number(answers.price).toFixed(2),
+                    stock_quantity: Math.floor(Number(answers.stock)),
+                    product_sales: 0
+                };
+                let sql2 = "INSERT INTO products SET ?"
+                connection.query(sql2, item, error=>{
+                    if(error){
+                        console.log(`Creation Error: ${error}`);
+                    }
+                    else{
+                        console.log(`Product successfully added into inventory!`);
+                        setTimeout(menu, 2500);
+                    }
+                })
+            })
+        }
     })
+    
 }
  function menu(){
      ask.prompt([

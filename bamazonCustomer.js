@@ -61,12 +61,14 @@ function customerSale(data){
         }
         else{
             let cost = answers.quantity * data[index].selling_price;
+            let sales = data[index].product_sales + cost;
             console.log(`The Total Cost of this Purchase is: $${cost}.`);
             let sql = "UPDATE products SET ? WHERE ?"
             let newStock = data[index].stock_quantity - answers.quantity;
             connection.query(sql, [
                 {
-                    stock_quantity: newStock
+                    stock_quantity: newStock,
+                    product_sales: sales
                 },
                 {
                     item_id: answers.productID
